@@ -64,7 +64,7 @@ const StyledButton = styled.button<TStyledButtonProps>`
   }};
 `;
 
-function App() {
+function StyledComponents() {
   const [theme, setTheme] = useState(themeBlue);
   return (
     <div>
@@ -96,4 +96,4 @@ function App() {
   );
 }
 
-export default App;
+export default StyledComponents;
