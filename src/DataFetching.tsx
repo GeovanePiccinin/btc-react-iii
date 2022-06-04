@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import useSWR from "swr";
+import { useQuery } from "react-query";
 
 const MAX_RETRY = 10;
 export const DataFetchingNoLib = () => {
@@ -44,7 +45,7 @@ export const DataFetchingNoLib = () => {
   );
 };
 
-export const DataFetching = () => {
+export const DataFetchingSWR = () => {
   const { data, error } = useSWR(
     "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd",
     (...arg) => fetch(...arg).then((res) => res.json()),
@@ -66,6 +67,38 @@ export const DataFetching = () => {
       <ul>
         {data.map((coin: any) => (
           <li>{coin.name}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+// DataFetchingReactQuery
+export const DataFetching = () => {
+  const { isLoading, data, error } = useQuery(
+    "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd",
+    () =>
+      fetch(
+        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd"
+      ).then((res) => res.json()),
+    {
+      refetchOnWindowFocus: true,
+    }
+  );
+
+  if (error) {
+    return <div>Um error foi encontrado</div>;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      <ul>
+        {data.map((coin: any) => (
+          <li key={coin.id}>{coin.name}</li>
         ))}
       </ul>
     </div>
